@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Quiz Management</h1>
+            <form id="addquestionForm">
+                <label for="question">Question Statement:</label>
+                <input type="text" id="email" placeholder="Enter your Question Statement" required>
+                <label for="optionA">OptionA:</label>
+                <input type="text" id="optionA" placeholder="Enter optionA" required>
+
+                <label for="optionB">OptionB:</label>
+                <input type="text" id="optionB" placeholder="Enter optionB" required>
+
+                <label for="optionC">OptionC:</label>
+                <input type="text" id="optionC" placeholder="Enter optionC" required>
+
+                <label for="optionD">OptionD:</label>
+                <input type="text" id="optionD" placeholder="Enter optionD" required>
+               
+                <label for="correctOption">Correct Option:</label>
+               <select id="CorrectOption" required>
+                <option value="A">Option A</option>
+                <option value="B">Option B</option>
+                <option value="C">Option C</option>
+                <option value="D">Option D</option>
+
+               </select>
+
+               <button type="submit">Add Question</button>
+
+            </form>
+
+            <h2>Questions</h2>
+            <div id="questionGrid" class=""grid-container">
+            </div>
+         </div>
+        
+        <script>
+
+            const API_URL="https://trite-basalt-jujube.glitch.me/questions";
+
+            async function fetchQuestions() {
+                const response=await fetch(API_URL);
+                const question=await response.json();
+
+                const questionGrid=document.getElementById("questionsGrid");
+                questionGrid.innerHTML="";
+                questions.forEach(question => {
+                    const card=document.createElement("div");
+                    card.classList.add("card");
+                    if(question.reviewStatus)card.classList.add("reviewed");
+
+                    card.innerHTML=`</h3>${questions.statement}</h3><p>Options:</p>
+                    <ul>
+                        <li>A:${question.option.A}</li>
+                        <li>B:${question.option.B}</li>
+                        <li>C:${question.option.C}</li>
+                       <li>D:${question.option.D}</li>
+                    </ul>
+                    <p><b>Correct Option:</b>$ {question.correctOption}</p>
+                    <button class="review">Review Question</button>
+                    <button class="delete">delete Question</button>`;
+
+                    card.querySelector(".review").addEventListener("click",() => reviewQuestion(questionid));
+                    card.querySelector(".delete").addEventListener("click",() => deleteQuestion(questionid));
+                    
+                    questionsGrid.appendChild(card);
+                    
+                    
+                    
+                });
+
+                //Add a new Document
+
+                document.getElementById("addQuestionForm").addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const question={
+                        statement: document.getElementById("question").value,
+                        options:{
+                            A:document.getElementById("optionA").value,
+                            B:document.getElementById("optionA").value,
+                            C:document.getElementById("optionA").value,
+                            D:document.getElementById("optionA").value,
+                        },
+                        correctOption:document.getElementById("correctOption").value,
+                        reviewStatus:false
+                    };
+
+                    const response=await fetch(API_URL,{
+                        mathod:"POST",
+                        HEADERS:{
+                            "content-Type":"applications/json" },
+                            body:JSON.stringify(question)
+                        });
+                        if(response.ok){
+                            alert("Question Created");
+                        }
+                        fetchQuestions();
+                    
+                    });
+
+                    async function reviewQuestion(id) {
+                        if(confirm("Are You sure to review the question")){
+                            const response=await fetch(`${API_URL}/${id})`,{
+                                method:"PATCH",
+                                headers:{
+                                   "content-Type":"applications/json"
+                                },
+                                body: JSON.stringify({reviewStatus:true})
+                            }
+                        };
+                        
+                        if(response.ok){
+                            fetchQuestions();
+                        }
+
+                        
+                    }
+
+                    async function deleteQuestion(id) {
+                        if(confirm("Are You sure to delete the question")){
+                            const response=await fetch(`${API_URL}/${id})`,{
+                                method:"DELETE",
+                            }
+                        
+                        },
+                        
+                        if(response.ok){
+                            fetchQuestions();
+                        }
+
+                        
+                    }
+
+                    
+
+                });
+            }
+            fetchQuestions();
+
+
+        </script>
+    </body>
+</html>

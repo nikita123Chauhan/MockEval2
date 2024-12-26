@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <style>
+          body{
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: lightgreen;
+          }
+
+          .login-container{
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 12px 14px rgba(0, 0, 0, 0.1);
+          }
+          input{
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+          }
+          button{
+            padding: 10px 20px;
+            background-color: #28a745;
+            color:#fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+
+          button:hover{
+            background-color: #218838;
+          }
+
+          .error{
+            color: red;
+            margin-top: 10px;
+          }
+
+       </style>
+
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>Login</h1>
+            <form id="loginform">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter your Email" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <button type="Submit">Login</button> </button>
+            </form>
+            <p id="errorMessage" class="error"></p>
+        </div>
+        <script>
+            document.getElementById("loginform").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const email=document.getElementById("email").value;
+                const password=document.getElementById("password").value;
+
+                //valid credential
+                const validEmail="empher@gmail.com";
+                const validPassword="empher@123";
+
+                if(email===validEmail){
+                    alert("Login successfull, you are Redirectiong into the quiz page");
+                    window.location.href="quiz.html";
+                }
+                else{
+                    document.getElementById("errormessage").textContent="Invalid Email or Password !!! plaese try again.";
+                }
+            })
+        </script>
+    </body>
+</html>
